@@ -4,6 +4,7 @@ public class Section
 {
     private String name, faculty, schedule;
     private int startTime, endTime, capacity;
+    private Course course;
     private ArrayList<Student> students;
     
     public Section(String name, String faculty, String schedule, 
