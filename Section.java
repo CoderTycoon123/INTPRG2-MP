@@ -49,19 +49,19 @@ public class Section
         students.add(student);
     }
     
-    public Student removeStudent(String ID)
+    public Student removeStudent(Student student)
     {
         int i = 0;
         Student s = null;
         
-        while (i < students.size() && !students.get(i).getID().equals(ID))
+        while (i < students.size() && !students.get(i).equals(student))
         {
             i ++;
         }
         
         if (i < students.size())
         {
-            s = students.get(i);
+            s = students.remove(student);
         }
         
         return s;
