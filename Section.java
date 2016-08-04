@@ -17,7 +17,7 @@ public class Section
             int startTime, int endTime, int nCapacity)
     {
         students = new ArrayList<>();
-        this.name = name;
+        this.name = name; // should checking be included?
         this.faculty = faculty;
         this.schedule = schedule;
         this.startTime = startTime;
