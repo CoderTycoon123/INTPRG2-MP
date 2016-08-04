@@ -2,11 +2,16 @@ import java.util.ArrayList;
 
 public class Section 
 {
-    private String name, faculty, schedule;
-    private int startTime, endTime, capacity;
+    private String name, 
+    			   faculty, 
+    			   schedule;
+    private int    startTime, 
+    			   endTime, 
+    			   capacity;
     private Course course;
     private ArrayList<Student> students;
     
+    // constructor
     public Section(String name, String faculty, String schedule, 
             int startTime, int endTime, int nCapacity)
     {
@@ -19,6 +24,7 @@ public class Section
         capacity = nCapacity;
     }
     
+    // getters
     public String getName()
     {
         return name;
@@ -44,9 +50,28 @@ public class Section
         return endTime;
     }
     
+    // other methods
     public void addStudent(Student student)
     {
-        students.add(student);
+    	boolean check = true;
+    	if (students == null)
+        {
+        	students.add(student);
+        }
+        else
+        {	
+        	int i;
+            for(i = 0; i < students.size(); i++)
+            {
+            	if (student.getID().equals(students.get(i).getID()))
+            		check = false;
+            }
+        	if(check)
+        		students.add(student);
+        	else
+        		System.out.println("sutdent is already enlisted in this section.");
+        }
+    	
     }
     
     public Student removeStudent(Student student)
@@ -54,14 +79,14 @@ public class Section
         int i = 0;
         Student s = null;
         
-        while (i < students.size() && !students.get(i).equals(student))
+        while (i < students.size() && !students.get(i).getID().equals(student.getID()))
         {
             i ++;
         }
         
         if (i < students.size())
         {
-            s = students.remove(student);
+            s = students.remove(i);
         }
         
         return s;
