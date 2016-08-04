@@ -1,3 +1,4 @@
+package EnrollmentSysMP;
 import java.util.ArrayList;
 
 public class Section 
@@ -48,6 +49,14 @@ public class Section
     public int getEndTime()
     {
         return endTime;
+    }
+    public int getCapacity()
+    {
+    	return capacity;
+    }
+    public Course getCourse()
+    {
+    	return course;
     }
     
     // other methods
