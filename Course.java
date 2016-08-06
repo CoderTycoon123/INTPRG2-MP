@@ -12,10 +12,7 @@ public class Course
     {
         sections = new ArrayList<>();
         this.name = name;
-        if (code.length() == 7 && code.equals(code.toUpperCase()))
-        	this.code = code;
-        else
-        	System.out.println("invalid course code input.");
+        this.code = code;
         units = nUnits;
     }
     
