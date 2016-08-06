@@ -63,7 +63,7 @@ public class Section
     public void addStudent(Student student)
     {
     	boolean check = true;
-    	if (students == null)
+    	if (students.size()== 0)
         {
         	students.add(student);
         }
@@ -78,7 +78,7 @@ public class Section
         	if(check)
         		students.add(student);
         	else
-        		System.out.println("sutdent is already enlisted in this section.");
+        		System.out.println("student is already enlisted in this section.");
         }
     	
     }
@@ -86,8 +86,6 @@ public class Section
     public Student removeStudent(Student student)
     {
         int i = 0;
-        Student s = null;
-        
         while (i < students.size() && !students.get(i).getID().equals(student.getID()))
         {
             i ++;
@@ -95,10 +93,10 @@ public class Section
         
         if (i < students.size())
         {
-            s = students.remove(i);
+            return students.remove(i);
         }
         
-        return s;
+        return null;
     }
     
     public ArrayList<Student> getStudents()
