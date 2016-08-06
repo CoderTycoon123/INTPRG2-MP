@@ -1,3 +1,4 @@
+package EnrollmentSysMP;
 import java.util.ArrayList;
 
 public class Course 
@@ -35,7 +36,25 @@ public class Course
     
     public void addSection(Section sect)
     {
-        sections.add(sect);
+    	boolean check = true;
+    	if (sections.size()== 0)
+        {
+        	sections.add(sect);
+        }
+        else
+        {	
+        	int i;
+            for(i = 0; i < sections.size(); i++)
+            {
+            	if (sect.getName().equals(sections.get(i).getName()))
+            		check = false;
+            }
+        	if(check)
+        		sections.add(sect);
+        	else
+        		System.out.println("the course already has "+sect.getName()+".");
+        }
+    	
     }
     
     public ArrayList<Section> getSections()
