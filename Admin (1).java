@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Admin extends JFrame implements ItemListener, ActionListener
+public class AdminGUI extends JFrame implements ItemListener, ActionListener
 {   
     JComboBox cb;
     CardLayout cl;
