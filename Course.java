@@ -5,10 +5,10 @@ public class Course
 {
     private String name, 
     			   code;
-    private int    units;
+    private double    units;
     private ArrayList<Section> sections;
     
-    public Course(String name, String code, int nUnits)
+    public Course(String name, String code, double nUnits)
     {
         sections = new ArrayList<>();
         this.name = name;
@@ -26,7 +26,7 @@ public class Course
         return code;
     }
     
-    public int getUnits()
+    public double getUnits()
     {
         return units;
     }
