@@ -24,7 +24,7 @@ public class Admin
 	}
 	
 	// other methods
-	public void registerStudent(String ID, String pw, String LN, String FN, int minUnits, int maxUnits)
+	public void registerStudent(String ID, String pw, String LN, String FN, double minUnits, double maxUnits)
 	{
 		if (allStudents.size() == 0)
 		{
@@ -64,7 +64,7 @@ public class Admin
 			System.out.println("could not find student with ID no."+ID+".");
 	}
 	
-	public void addCourse(String code, String name, int nUnits)
+	public void addCourse(String code, String name, double nUnits)
 	{
 		if (code.length() == 7 && code.equals(code.toUpperCase()))
 		{	int i;
