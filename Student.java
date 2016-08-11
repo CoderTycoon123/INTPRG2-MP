@@ -8,13 +8,13 @@ public class Student
 				   password,
 				   firstName,
 				   lastName;
-	private int    minUnits,
+	private double minUnits,
 				   maxUnits;
 	private boolean isEnrolled;
 	private ArrayList<Course> enlistedCourses;
 	
 	// constructors
-	public Student(String ID, String PW, String LN, String FN, int minUnits, int maxUnits)
+	public Student(String ID, String PW, String LN, String FN, double minUnits, double maxUnits)
 	{
 		usrIDno = ID;
 		password = PW;
@@ -48,12 +48,12 @@ public class Student
 		this.lastName = lastName;
 	}
 
-	public void setMaxUnits(int maxUnits) 
+	public void setMaxUnits(double maxUnits) 
 	{
 		this.maxUnits = maxUnits;
 	}
 	
-	public void setMinUnits(int minUnits) 
+	public void setMinUnits(double minUnits) 
 	{
 		this.minUnits = minUnits;
 	}
@@ -64,38 +64,11 @@ public class Student
 		if (isEnrolled == false && section.getCapacity() != section.getStudents().size())
 		{
 			boolean check = true;
-			int i, j, k, l;
-			for(i = 0; i < enlistedCourses.size() && check; i++)
+			int i;
+			for(i = 0; i < enlistedCourses.size(); i++)
 			{
 				if (section.getCourse().getCode().equalsIgnoreCase(enlistedCourses.get(i).getCode()))
 					check = false;
-                                else
-                                {
-                                    for (j = 0; j < enlistedCourses.get(i).getSections().size() && check; j ++)
-                                    {
-                                        for (k = 0; k < enlistedCourses.get(i).getSections().get(j).getStudents().size() && check; k ++)
-                                        {
-                                            if (enlistedCourses.get(i).getSections().get(j).getStudents().get(k).getID().equals(getID()))
-                                            {
-                                                if (section.getStartTime() == enlistedCourses.get(i).getSections().get(j).getStartTime())
-                                                {
-                                                    check = false;
-                                                }
-                                                else 
-                                                {
-                                                    for (l = 1; l < section.getEndTime() - section.getStartTime(); l ++)
-                                                    {
-                                                        if (enlistedCourses.get(i).getSections().get(j).getStartTime() + l == section.getStartTime() || 
-                                                                enlistedCourses.get(i).getSections().get(j).getStartTime() + l == section.getEndTime())
-                                                        {
-                                                            check = false;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
 			}
 			if(check)
 			{
@@ -124,7 +97,7 @@ public class Student
 	
 	public void enroll()
 	{
-		int totalUnits =0;
+		double totalUnits = 0;
 		int i;
 		for(i = 0; i < enlistedCourses.size(); i++)
 		{
