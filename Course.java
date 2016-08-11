@@ -1,61 +1,106 @@
 package EnrollmentSysMP;
 import java.util.ArrayList;
 
-public class Course 
+public class Section 
 {
     private String name, 
-    			   code;
-    private double    units;
-    private ArrayList<Section> sections;
+    			   faculty, 
+    			   schedule;
+    private int    startTime, 
+    			   endTime, 
+    			   capacity;
+    private Course course;
+    private ArrayList<Student> students;
     
-    public Course(String name, String code, double nUnits)
+    // constructor
+    public Section(String name, String faculty, String schedule, 
+            int startTime, int endTime, int nCapacity)
     {
-        sections = new ArrayList<>();
-        this.name = name;
-        this.code = code;
-        units = nUnits;
+        students = new ArrayList<>();
+        this.name = name; // should checking be included?
+        this.faculty = faculty;
+        this.schedule = schedule;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        capacity = nCapacity;
     }
     
+    // getters
     public String getName()
     {
         return name;
     }
     
-    public String getCode()
+    public String getFaculty()
     {
-        return code;
+        return faculty;
     }
     
-    public double getUnits()
+    public String getSchedule()
     {
-        return units;
+        return schedule;
     }
     
-    public void addSection(Section sect)
+    public int getStartTime()
+    {
+        return startTime;
+    }
+    
+    public int getEndTime()
+    {
+        return endTime;
+    }
+    public int getCapacity()
+    {
+    	return capacity;
+    }
+    public Course getCourse()
+    {
+    	return course;
+    }
+    
+    // other methods
+    public void addStudent(Student student)
     {
     	boolean check = true;
-    	if (sections.size()== 0)
+    	if (students.size()== 0)
         {
-        	sections.add(sect);
+        	students.add(student);
         }
         else
         {	
         	int i;
-            for(i = 0; i < sections.size(); i++)
+            for(i = 0; i < students.size(); i++)
             {
-            	if (sect.getName().equals(sections.get(i).getName()))
+            	if (student.getID().equals(students.get(i).getID()))
             		check = false;
             }
         	if(check)
-        		sections.add(sect);
+        		students.add(student);
         	else
-        		System.out.println("the course already has "+sect.getName()+".");
+        		System.out.println("student is already enlisted in this section.");
         }
     	
     }
     
-    public ArrayList<Section> getSections()
+    public Student removeStudent(Student student)
     {
-        return sections;
+        int i = 0;
+        while (i < students.size() && !students.get(i).getID().equals(student.getID()))
+        {
+            i ++;
+        }
+        
+        if (i < students.size())
+        {
+            return students.remove(i);
+        }
+        
+        return null;
+    }
+    
+    public ArrayList<Student> getStudents()
+    {
+        return students;
     }
 }
