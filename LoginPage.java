@@ -72,6 +72,9 @@ public class LoginPage extends JFrame implements ActionListener
         
         pnl.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), "Login Page", 0, 0, new Font("Serif", Font.BOLD, 12), Color.black));
         add(pnl);
+        
+        JRootPane rp = SwingUtilities.getRootPane(btn);
+        rp.setDefaultButton(btn);
     }
     
     public void actionPerformed(ActionEvent e)
