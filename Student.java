@@ -1,3 +1,5 @@
+// Lim, Ivana
+// Tan, Nigel
 package EnrollmentSysMP;
 
 import java.util.ArrayList;
@@ -8,13 +10,13 @@ public class Student
 				   password,
 				   firstName,
 				   lastName;
-	private int    minUnits,
+	private double minUnits,
 				   maxUnits;
 	private boolean isEnrolled;
-	private ArrayList<Course> enlistedCourses;
+	private ArrayList<Section> enlistedSections;
 	
 	// constructors
-	public Student(String ID, String PW, String LN, String FN, int minUnits, int maxUnits)
+	public Student(String ID, String PW, String LN, String FN, double minUnits, double maxUnits)
 	{
 		usrIDno = ID;
 		password = PW;
@@ -23,7 +25,7 @@ public class Student
 		isEnrolled = false;
 		this.minUnits = minUnits;
 		this.maxUnits = maxUnits;
-		ArrayList<Course> enlistedCourses = new ArrayList<>();
+		enlistedSections = new ArrayList<>();
 	}
 	
 	// getters
@@ -32,11 +34,32 @@ public class Student
 		return usrIDno;
 	}
 	
-	public String getUsrIDno() 
+	public String getPW()
 	{
-		return usrIDno;
+		return password;
 	}
 	
+	public String getFN() 
+	{
+		return firstName;
+	}
+	
+	public String getLN() 
+	{
+		return lastName;
+	}
+	public double getMin()
+	{
+		return minUnits;
+	}
+	public double getMax()
+	{
+		return maxUnits;
+	}
+	public ArrayList<Section> getEnlistedSections()
+	{
+		return enlistedSections;
+	}
 	// setters
 	public void setFirstName(String firstName) 
 	{
@@ -59,66 +82,64 @@ public class Student
 	}
 	
 	// other methods
-	public void enlistSection(Section section) // still lacks checking of schedule conflicts
+	public void enlistSection(Section section) // still lacks checking of schedule conflicts DONE
 	{
-		if (isEnrolled == false && section.getCapacity() != section.getStudents().size())
+		/*if (enlistedSections.size() == 0)
+		{
+			enlistedSections.add(section);
+		}
+		else*/ if (isEnrolled == false && section.getCapacity() != section.getStudents().size()) //checks if capacity is full or student is enrolled
 		{
 			boolean check = true;
-			int i, j, k, l;
-			for(i = 0; i < enlistedCourses.size() && check; i++)
+			int i;
+			for(i = 0; i < enlistedSections.size(); i++)
 			{
-				if (section.getCourse().getCode().equalsIgnoreCase(enlistedCourses.get(i).getCode()))
+				if (section.getCourse().getCode().equalsIgnoreCase(enlistedSections.get(i).getCourse().getCode())) // checks if duplicate course
+				{
+					InfoDialog info = new InfoDialog ("Enslist Section","Unsuccessful enlistment: The student has has duplicate courses.");
 					check = false;
-                                else
-                                {
-                                    for (j = 0; j < enlistedCourses.get(i).getSections().size() && check; j ++)
-                                    {
-                                        for (k = 0; k < enlistedCourses.get(i).getSections().get(j).getStudents().size() && check; k ++)
-                                        {
-                                            if (enlistedCourses.get(i).getSections().get(j).getStudents().get(k).getID().equals(getID()))
-                                            {
-                                                if (section.getStartTime() == enlistedCourses.get(i).getSections().get(j).getStartTime())
-                                                {
-                                                    check = false;
-                                                }
-                                                else 
-                                                {
-                                                    for (l = 1; l < section.getEndTime() - section.getStartTime(); l ++)
-                                                    {
-                                                        if (enlistedCourses.get(i).getSections().get(j).getStartTime() + l == section.getStartTime() || 
-                                                                enlistedCourses.get(i).getSections().get(j).getStartTime() + l == section.getEndTime())
-                                                        {
-                                                            check = false;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+					return ;
+				}
 			}
-			if(check)
+			
+			for (i = 0; i < enlistedSections.size(); i++) // checks for schedule conflicts
 			{
-				enlistedCourses.add(section.getCourse());
-				section.addStudent(this);
+				if (section.isConflict(enlistedSections.get(i)))
+				{
+					InfoDialog info = new InfoDialog ("Enslist Section","Unsuccessful enlistment: The student has conflicts in schedule.");
+					check = false;
+					return;
+				}
 			}
-				
+			if (check)
+			{
+				enlistedSections.add(section);
+				section.addStudent(this);
+				InfoDialog info = new InfoDialog ("Enslist Section","Successful enlistment: "+section.getCourse().getCode() + " "+section.getName());
+			}
 		}
 		else
-			System.out.println("Student is already enrolled or the section is closed.");
+		{
+			InfoDialog info = new InfoDialog ("Enslist Section","Unsuccessful enlistment: Student is already enrolled or the section is closed.");
+		}
 	}
 	
-	public Course removeEnlistment(Course course)
+	public Section removeEnlistment(Course course)
 	{
 		if (isEnrolled == false)
 		{
 			int i;
-			for(i = 0; i < enlistedCourses.size(); i++)
+			for(i = 0; i < enlistedSections.size(); i++)
 			{
-				if(course.getCode().equals(enlistedCourses.get(i).getCode()))
-					return enlistedCourses.remove(i);
+				if(course.getCode().equals(enlistedSections.get(i).getCourse().getCode()))
+				{
+					InfoDialog info = new InfoDialog ("Remove Enslistment","Successful! Enlistment removed: "+
+							enlistedSections.get(i).getCourse().getCode()+" "+enlistedSections.get(i).getName());
+					return enlistedSections.remove(i);
+				}
 			}
 		}
+		InfoDialog info = new InfoDialog("Remove Enslistment","Unsuccessful.");
 		return null;
 	}
 	
@@ -126,12 +147,23 @@ public class Student
 	{
 		int totalUnits =0;
 		int i;
-		for(i = 0; i < enlistedCourses.size(); i++)
+		for(i = 0; i < enlistedSections.size(); i++)
 		{
-			totalUnits += enlistedCourses.get(i).getUnits();
+			totalUnits += enlistedSections.get(i).getCourse().getUnits();
 		}
 		if (totalUnits >= this.minUnits && totalUnits <= this.maxUnits)
+		{
 			isEnrolled = true;
+			InfoDialog info = new InfoDialog("Enroll", "Successful");
+		}
+		else if(totalUnits < minUnits)
+		{
+			InfoDialog info = new InfoDialog("Enroll", "Unsuccessful: Student has not reach the minimum number of units.");
+		}
+		else if(totalUnits > maxUnits)
+		{
+			InfoDialog info = new InfoDialog("Enroll", "Unsuccessful: Student has overload units. Please remove some of the enlisted classes.");
+		}
 	}
 	public void viewEAF()
 	{

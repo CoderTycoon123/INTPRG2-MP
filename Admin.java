@@ -1,6 +1,9 @@
+// Lim, Ivana
+// Tan, Nigel
 package EnrollmentSysMP;
 
 import java.util.ArrayList;
+import java.util.Vector;
 public class Admin
 {
 	
@@ -22,28 +25,59 @@ public class Admin
 	{
 		return courses;
 	}
-	
-	// other methods
-	public void registerStudent(String ID, String pw, String LN, String FN, int minUnits, int maxUnits)
+	public ArrayList<Student> getAllStudents()
 	{
-		if (allStudents.size() == 0)
+		return allStudents;
+	}
+	
+	public Vector getVectorCourses()
+	{
+		return new Vector(courses);
+	}
+	
+	public Vector getVectorStudents()
+	{
+		return new Vector(allStudents);
+	}
+	// other methods
+	public void registerStudent(String ID, String pw, String LN, String FN, double minUnits, double maxUnits)
+	{
+		if(!ID.matches("[0-9]{8}"))
 		{
-			allStudents.add(new Student(ID, pw, LN, FN, minUnits, maxUnits));
+			InfoDialog info = new InfoDialog ("Register Student","ID number should only have 8 digits");
+		}
+		if(minUnits > 0 && maxUnits > 0 && minUnits <= maxUnits)
+		{
+			if (allStudents.size() == 0)
+			{
+				allStudents.add(new Student(ID, pw, LN, FN, minUnits, maxUnits));
+				InfoDialog info = new InfoDialog("Register Student","Successful Registration!");
+			}
+			else
+			{
+				int i;
+				boolean check = true;
+				for(i = 0; i < allStudents.size(); i++)
+				{
+					if (allStudents.get(i).getID().equals(ID))
+						check = false;
+				}
+				if (check)
+				{
+					allStudents.add(new Student(ID, pw, LN, FN, minUnits, maxUnits));
+					InfoDialog info = new InfoDialog("Register Student","Successful Registration!");
+				}
+				else
+				{
+					InfoDialog info = new InfoDialog ("Register Student","The student is already in the list.");
+				}
+			}
 		}
 		else
 		{
-			int i;
-			boolean check = true;
-			for(i = 0; i < allStudents.size(); i++)
-			{
-				if (allStudents.get(i).getID().equals(ID))
-					check = false;
-			}
-			if (check)
-				allStudents.add(new Student(ID, pw, LN, FN, minUnits, maxUnits));
-			else
-				System.out.println("The student already is in the list.");
+			InfoDialog info = new InfoDialog ("Register Student","invalid unit inputs");
 		}
+			
 	}
 	
 	public void editStudent(String ID, String LN, String FN)
@@ -59,42 +93,60 @@ public class Admin
 			}
 		}
 		if(check)
-			System.out.println("Successful!");
+		{
+			InfoDialog info = new InfoDialog ("Edit Student","Successful!");
+		}
 		else
-			System.out.println("could not find student with ID no."+ID+".");
+		{
+			InfoDialog info = new InfoDialog ("Edit Student","Could not find student with ID no."+ID+".");
+		}
 	}
 	
-	public void addCourse(String code, String name, int nUnits)
+	public void addCourse(String code, String name, double nUnits)
 	{
-		if (code.length() == 7 && code.equals(code.toUpperCase()))
+		if (code.matches("[A-Z[0-9]]{7}"))
 		{	int i;
 			boolean check = true;
 			for(i = 0; i < courses.size(); i++)
 			{
-				if (courses.get(i).getCode().equals(name))
+				if (courses.get(i).getCode().equals(code))
+				{
+					InfoDialog info = new InfoDialog ("Add Course","The course code already exists.");
 					check = false;
+					return;
+				}
 			}
 			if(check)
-        		courses.add(new Course( code,  name,  nUnits));
-			else
-				System.out.println("The course code already exists.");
+			{
+				courses.add(new Course( code,  name,  nUnits));
+				InfoDialog info = new InfoDialog ("Add Course","Successful! Course Added!");
+			}
 		}
 		else
-        	System.out.println("invalid course code input.");
-	}
+		{
+			InfoDialog info = new InfoDialog ("Add Course","Invalid course code input.");
+		}
+    }
 	
-	public void openSection(String courseName,String name, String faculty, String schedule, 
+	public void openSection(Course course, String name, String faculty, String schedule, 
             int startTime, int endTime, int nCapacity)
 	{
-		//if(SecName.matches([A-Z],[]))		// to be edited
-		int i;
-		for(i = 0; i < courses.size(); i++)
+		if(name.matches("[A-Z][0-9]{2}"))
 		{
-			if(courses.get(i).getCode().equals(courseName))
+			int i;
+			for(i = 0; i < courses.size(); i++)
 			{
-				courses.get(i).addSection(new Section(  name,  faculty,  schedule, 
-			             startTime,  endTime,  nCapacity));
+				if(courses.get(i).getCode().equals(course.getCode()))
+				{
+					courses.get(i).addSection(new Section(courses.get(i),  name,  faculty,  schedule, 
+				             startTime,  endTime,  nCapacity));
+					
+				}
 			}
+		}
+		else
+		{
+			InfoDialog info = new InfoDialog ("Add Course","Invalid section format.");
 		}
 	}
 	
@@ -112,13 +164,7 @@ public class Admin
 					String sectName = c.getSections().get(j).getName();
 					if (sectName.equals(section.getName()))
 					{
-						int k;
-						for(k = 0; k < s.getStudents().size(); j++)
-						{
-							System.out.println("List of students enrolled: "+s.getStudents().size());
-							System.out.println("Total number of slots: "+ s.getCapacity());
-							System.out.println("number of slots remaining: "+(s.getCapacity() - s.getStudents().size()));
-						}
+						section.viewEnrolledStudents();
 					}
 					
 				}
@@ -126,4 +172,6 @@ public class Admin
 			
 		}
 	}
+	
+	
 }

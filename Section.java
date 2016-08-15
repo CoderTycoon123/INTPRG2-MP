@@ -1,3 +1,5 @@
+// Lim, Ivana
+// Tan, Nigel
 package EnrollmentSysMP;
 import java.util.ArrayList;
 
@@ -13,7 +15,7 @@ public class Section
     private ArrayList<Student> students;
     
     // constructor
-    public Section(String name, String faculty, String schedule, 
+    public Section(Course course, String name, String faculty, String schedule, 
             int startTime, int endTime, int nCapacity)
     {
         students = new ArrayList<>();
@@ -23,6 +25,7 @@ public class Section
         this.startTime = startTime;
         this.endTime = endTime;
         capacity = nCapacity;
+        this.course = course;
     }
     
     // getters
@@ -50,10 +53,12 @@ public class Section
     {
         return endTime;
     }
+   
     public int getCapacity()
     {
     	return capacity;
     }
+    
     public Course getCourse()
     {
     	return course;
@@ -76,7 +81,10 @@ public class Section
             		check = false;
             }
         	if(check)
+        	{
         		students.add(student);
+        	}
+        		
         	else
         		System.out.println("student is already enlisted in this section.");
         }
@@ -85,22 +93,55 @@ public class Section
     
     public Student removeStudent(Student student)
     {
-        int i = 0;
-        while (i < students.size() && !students.get(i).getID().equals(student.getID()))
+        int i;
+        for (i = 0; i < students.size(); i++)
         {
-            i ++;
+        	if (students.get(i).getID().equals(student.getID()))
+        	{
+        		return students.get(i);
+        	}
         }
-        
-        if (i < students.size())
-        {
-            return students.remove(i);
-        }
-        
         return null;
     }
     
     public ArrayList<Student> getStudents()
     {
         return students;
+    }
+    
+    public boolean isConflict(Section s)
+    {/*
+    	boolean check = false;
+    	if (!this.getSchedule().equals(s.getSchedule())
+    		&& (this.getStartTime() < s.getStartTime() && this.getEndTime() < s.getStartTime()
+    			|| this.getStartTime() > s.getStartTime() && this.getStartTime() > s.getEndTime()))
+    		check = true;
+    	return check;
+    	*/
+    	boolean check = false;
+    	if(this.getSchedule().equals(s.getSchedule()))
+    	{
+    		if ((s.getStartTime() <= this.getEndTime() && s.getStartTime() >= this.getStartTime()
+    	    		|| s.getEndTime() >= this.getStartTime() && s.getEndTime() <= this.getEndTime()))
+    	    		check = true;
+    	}
+    	
+    	return check;
+    	
+    }
+    
+    public void viewEnrolledStudents()
+    {
+    	System.out.println("\nCOURSE CODE: " + this.getCourse().getCode());
+    	System.out.println("SECTION: " + this.getName());
+    	System.out.println("List of Enrolled Students:");
+    	int k;
+		for(k = 0; k < students.size(); k++)
+		{
+			System.out.println(students.get(k).getID());
+		}
+		System.out.println("List of students enrolled: "+students.size());
+		System.out.println("Total number of slots: "+ this.getCapacity());
+		System.out.println("number of slots remaining: "+(this.getCapacity() - students.size()));
     }
 }
