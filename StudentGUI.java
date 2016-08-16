@@ -129,16 +129,21 @@ public class StudentGUI extends JFrame implements ActionListener
 		else if (e.getActionCommand().equals("Enlist!"))	// inside Enlist Section
 		{
 			String strSection = cbSections.getSelectedItem().toString();
+			String strCourse = cbCourses.getSelectedItem().toString();
 			Section s = null;
 			int i;
 			for(i = 0; i < admin.getCourses().size(); i++)
 			{
-				int j;
-				for(j = 0; j < admin.getCourses().get(i).getSections().size(); j++)
+				if (admin.getCourses().get(i).getCode().equals(strCourse))
 				{
-					if ( admin.getCourses().get(i).getSections().get(j).getName().equals(strSection))
-						s = admin.getCourses().get(i).getSections().get(j);
+					int j;
+					for(j = 0; j < admin.getCourses().get(i).getSections().size(); j++)
+					{
+						if ( admin.getCourses().get(i).getSections().get(j).getName().equals(strSection))
+							s = admin.getCourses().get(i).getSections().get(j);
+					}
 				}
+				
 				
 			}
 			//Section s = (Section)cbSections.getSelectedItem();
@@ -226,7 +231,7 @@ public class StudentGUI extends JFrame implements ActionListener
 		
 	}
 	
-	/*public static void main(String [] args)
+	public static void main(String [] args)
 	{
 		//Student student = new Student("114",);
 		Admin admin = new Admin();
@@ -248,5 +253,5 @@ public class StudentGUI extends JFrame implements ActionListener
 		Student yuta = admin.getAllStudents().get(2);
 		StudentGUI app = new StudentGUI(ivy,admin);
 				
-	}*/
+	}
 }

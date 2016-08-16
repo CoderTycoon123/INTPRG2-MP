@@ -683,9 +683,9 @@ public class AdminGUI extends JFrame implements ActionListener
 			}
 		}
 	}
-	/*public static void main(String [] args)
+	public static void main(String [] args)
 	{
 		Admin admin = new Admin();
 		AdminGUI app = new AdminGUI(admin);
-	}*/
+	}
 }
